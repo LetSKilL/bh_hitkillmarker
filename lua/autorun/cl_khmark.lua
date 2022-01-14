@@ -74,16 +74,19 @@ local function DrawDamageInd()
 
     for k, fract in ipairs(kill_lines) do
         if fract > 0 then
-            local fullsize = 600
-            local col = Color(255,0,0,144 * fract)
+            local fullsize = GetConVar("km_ply_size"):GetInt()
+            local col = Color(0,0,0)
             if kill_lines_npc[k] then
-                col = Color(200,162,200,144 * fract)
+                col = Color(GetConVar("hm_npc_r"):GetInt(),GetConVar("hm_npc_g"):GetInt(),GetConVar("hm_npc_b"):GetInt(),GetConVar("hm_npc_a"):GetInt() * fract)
+            else
+                col = Color(GetConVar("hm_ply_r"):GetInt(),GetConVar("hm_ply_g"):GetInt(),GetConVar("hm_ply_b"):GetInt(),GetConVar("hm_ply_a"):GetInt() * fract)
             end
+            
             local offset = fullsize*0.25 - 0.5*fullsize* (1-fract)
             local size = fullsize*math.min(1-fract, 0.5)*2 - fullsize*(math.max(1-fract, 0.5))
 
-            local xx = -offset + 20 * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
-            local yy = offset + 20 * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+            local xx = -offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+            local yy = offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
             
             draw.NoTexture()
             surface.SetDrawColor(col)
