@@ -1,8 +1,5 @@
 if SERVER then return end
 
---local _ply_dmg_color = Color(255,0,0,188)
---local _npc_dmg_color = Color(200,162,200,188)
-
 local dmg_leafs = {0,0,0, 0,0,0, 0,0,0, 0,0,0} --every 30*
 local dmg_leafs_npc = {false,false,false, false,false,false, false,false,false, false,false,false}
 local dmg_cur_leaf = 1
