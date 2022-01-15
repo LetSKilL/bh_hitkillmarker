@@ -7,7 +7,7 @@ local function dmgtake(ent, dmginfo, took)
     if !took then return end
     if (ent:IsNPC() or ent:IsPlayer()) and dmginfo:GetAttacker():IsPlayer() then
         net.Start("bh_sb_dmgind")
-        net.WriteUInt(math.Clamp(dmginfo:GetDamage(), 0, 4294967294), 32) --Expanded to 32 bits for sandbox
+        net.WriteUInt(math.Clamp(dmginfo:GetDamage(), 0, 4294967294), 32) --Expanded to 32 bits for sandbox. Also I know that it pointless
         net.WriteBool(ent:IsNPC())
         net.Send(dmginfo:GetAttacker())
     end

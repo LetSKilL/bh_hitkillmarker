@@ -25,7 +25,7 @@ local khm_default = {
     hm_npc_speed = 0.1,
 
     hm_test = 0,
-    hm_test_npc = 0
+    hm_test_npc = 0,
 
     km_enabled = 1,
     km_test = 0,
@@ -48,10 +48,12 @@ local khm_default = {
     km_npc_speed = 0.1,
     km_npc_size = 600,
     km_npc_offset = 20,
+    km_npc_width = 3,
 
     km_ply_speed = 0.1,
     km_ply_size = 600,
     km_ply_offset = 20,
+    km_ply_width = 3
 }
 
 for k,v in pairs(khm_default) do
@@ -65,8 +67,7 @@ hook.Add( "AddToolMenuCategories", "CustomCategory", function()
 end )
 
 hook.Add( "PopulateToolMenu", "CustomMenuSettings", function()
-	spawnmenu.AddToolMenuOption( "Utilities", "BH Hit/Kill Markers", "HKMark", "Hit marker", "", "", function( panel )
-        
+	spawnmenu.AddToolMenuOption( "Utilities", "BH Hit/Kill Markers", "HMark", "Hit marker", "", "", function( panel )
         panel:ClearControls()
 
         panel:CheckBox("Enabled?", "hm_enabled")
@@ -116,7 +117,7 @@ hook.Add( "PopulateToolMenu", "CustomMenuSettings", function()
         panel:NumSlider("Animation speed", "hm_npc_speed", 0, 1)
     end )
 
-    spawnmenu.AddToolMenuOption( "Utilities", "BH Hit/Kill Markers", "HKMark", "Kill marker", "", "", function( panel )
+    spawnmenu.AddToolMenuOption( "Utilities", "BH Hit/Kill Markers", "KMark", "Kill marker", "", "", function( panel )
         panel:CheckBox("Enable", "km_enabled")
         panel:CheckBox("Test mode", "km_test")
         panel:CheckBox("NPC test", "km_test_npc")
@@ -153,10 +154,14 @@ hook.Add( "PopulateToolMenu", "CustomMenuSettings", function()
         panel:Help("Player kill marker appearence")
         panel:NumSlider("Animation speed", "km_ply_speed", 0, 1)
         panel:NumSlider("Size", "km_ply_size", 0, 2000)
+        panel:NumSlider("Width", "km_ply_width", 0, 50)
+        panel:NumSlider("Space between lines", "km_ply_offset", 0, 200)
 
         panel:Help("NPC kill marker appearence")
         panel:CheckBox("Use player killmarker settings", "km_npc_use_ply")
         panel:NumSlider("Animation speed", "km_npc_speed", 0, 1)
         panel:NumSlider("Size", "km_npc_size", 0, 2000)
+        panel:NumSlider("Width", "km_npc_width", 0, 50)
+        panel:NumSlider("Space between lines", "km_npc_offset", 0, 200)
     end)
 end )

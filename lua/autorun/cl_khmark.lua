@@ -74,32 +74,86 @@ local function DrawDamageInd()
 
     for k, fract in ipairs(kill_lines) do
         if fract > 0 then
-            local fullsize = GetConVar("km_ply_size"):GetInt()
             local col = Color(0,0,0)
             if kill_lines_npc[k] then
-                col = Color(GetConVar("hm_npc_r"):GetInt(),GetConVar("hm_npc_g"):GetInt(),GetConVar("hm_npc_b"):GetInt(),GetConVar("hm_npc_a"):GetInt() * fract)
+                col = Color(GetConVar("km_npc_r"):GetInt(),GetConVar("km_npc_g"):GetInt(),GetConVar("km_npc_b"):GetInt(),GetConVar("km_npc_a"):GetInt() * fract)
             else
-                col = Color(GetConVar("hm_ply_r"):GetInt(),GetConVar("hm_ply_g"):GetInt(),GetConVar("hm_ply_b"):GetInt(),GetConVar("hm_ply_a"):GetInt() * fract)
+                col = Color(GetConVar("km_ply_r"):GetInt(),GetConVar("km_ply_g"):GetInt(),GetConVar("km_ply_b"):GetInt(),GetConVar("km_ply_a"):GetInt() * fract)
             end
-            
-            local offset = fullsize*0.25 - 0.5*fullsize* (1-fract)
-            local size = fullsize*math.min(1-fract, 0.5)*2 - fullsize*(math.max(1-fract, 0.5))
 
-            local xx = -offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
-            local yy = offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
-            
-            draw.NoTexture()
-            surface.SetDrawColor(col)
-            surface.DrawTexturedRectRotated(ScrW()*0.5 - xx, ScrH()*0.5 - yy, size, 3, 225)
+            if GetConVar("km_npc_use_ply"):GetBool() then
+                local fullsize = GetConVar("km_ply_size"):GetInt()
+                
+                local offset = fullsize*0.25 - 0.5*fullsize* (1-fract)
+                local size = fullsize*math.min(1-fract, 0.5)*2 - fullsize*(math.max(1-fract, 0.5))
 
-            kill_lines[k] = Lerp(0.1, fract, -0.2)
+                local xx = -offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+                local yy = offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+                
+                draw.NoTexture()
+                surface.SetDrawColor(col)
+                surface.DrawTexturedRectRotated(ScrW()*0.5 - xx, ScrH()*0.5 - yy, size, GetConVar("km_ply_width"):GetInt(), 225)
+
+                kill_lines[k] = Lerp(GetConVar("km_ply_speed"):GetFloat(), fract, -0.2)
+            else
+                if kill_lines_npc[k] then
+                    local fullsize = GetConVar("km_npc_size"):GetInt()
+                    
+                    local offset = fullsize*0.25 - 0.5*fullsize* (1-fract)
+                    local size = fullsize*math.min(1-fract, 0.5)*2 - fullsize*(math.max(1-fract, 0.5))
+
+                    local xx = -offset + GetConVar("km_npc_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+                    local yy = offset + GetConVar("km_npc_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+                    
+                    draw.NoTexture()
+                    surface.SetDrawColor(col)
+                    surface.DrawTexturedRectRotated(ScrW()*0.5 - xx, ScrH()*0.5 - yy, size, GetConVar("km_npc_width"):GetInt(), 225)
+
+                    kill_lines[k] = Lerp(GetConVar("km_npc_speed"):GetFloat(), fract, -0.2)
+                else
+                    local fullsize = GetConVar("km_ply_size"):GetInt()
+                    
+                    local offset = fullsize*0.25 - 0.5*fullsize* (1-fract)
+                    local size = fullsize*math.min(1-fract, 0.5)*2 - fullsize*(math.max(1-fract, 0.5))
+
+                    local xx = -offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+                    local yy = offset + GetConVar("km_ply_offset"):GetInt() * (-1 + 2*(k%2)) * math.floor(k/2) * math.min(k-1, 1)
+                    
+                    draw.NoTexture()
+                    surface.SetDrawColor(col)
+                    surface.DrawTexturedRectRotated(ScrW()*0.5 - xx, ScrH()*0.5 - yy, size, GetConVar("km_ply_width"):GetInt(), 225)
+
+                    kill_lines[k] = Lerp(GetConVar("km_ply_speed"):GetFloat(), fract, -0.2)
+                end
+            end
         end
     end
 end
 
 local hm_test_timer = 0.3
+local km_test_timer = 0.3
 
 hook.Add("HUDPaint", "bh_sb_HitKillMarker", function()
+    if GetConVar("km_test"):GetBool() then
+        dmg_cur_leaf = 1
+        kill_lines = {kill_lines[1], 0.3, 0.5, 0.1, 0.7}
+
+        if GetConVar("km_test_npc"):GetBool() then
+            kill_lines_npc = {true,true,true,true,true}
+        else
+            kill_lines_npc = {false,false,false,false,false}
+        end
+
+        if kill_lines[1] <= 0 then
+            if km_test_timer > 0 then
+                km_test_timer = km_test_timer - FrameTime()
+            else
+                kill_lines[1] = 1
+                km_test_timer = 0.3
+            end
+        end
+    end
+
     if GetConVar("hm_test"):GetBool() then
         dmg_cur_leaf = 1
         dmg_leafs = {dmg_leafs[1],1,0.9, 0.8,0.7,0.6, 0.5,0.4,0.3, 0.2,0.1,0}
@@ -148,3 +202,30 @@ net.Receive("bh_sb_dmgind", function ()
 end)
 
 include("config.lua")
+
+timer.Create("forwwawa", 3, 0, function()
+    for i = 0, 6 do
+        timer.Simple(i*0.05, function()
+            local _isnpc = false
+            if (_isnpc and !GetConVar("hm_npc"):GetBool()) or (!_isnpc and !GetConVar("hm_ply"):GetBool()) then return end
+            dmg_cur_leaf = dmg_cur_leaf + 1
+            if dmg_cur_leaf > #dmg_leafs then
+                dmg_cur_leaf = 1
+            end
+
+            dmg_leafs[dmg_cur_leaf] = 1
+            dmg_leafs_npc[dmg_cur_leaf] = _isnpc
+            dmg_last = CurTime()
+        end)
+    end
+
+    timer.Simple(0.33, function()
+        for k,v in ipairs(kill_lines) do
+            if v <= 0 then
+                kill_lines[k] = 1
+                kill_lines_npc[k] = _isnpc
+                return
+            end
+        end
+    end)
+end)
