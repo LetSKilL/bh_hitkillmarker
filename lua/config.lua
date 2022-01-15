@@ -103,13 +103,13 @@ hook.Add( "PopulateToolMenu", "CustomMenuSettings", function()
 
         panel:AddItem(npc_hit_color)
 
-        panel:Help("Player hitmarker appearance")
+        panel:Help("Player hit marker appearance")
         panel:NumSlider("Screen center offset", "hm_ply_offset", 0, 500, 2)
         panel:NumSlider("Width", "hm_ply_width", 0, 50, 2)
         panel:NumSlider("Height (size)", "hm_ply_height", 0, 200, 2)
         panel:NumSlider("Animation speed", "hm_ply_speed", 0, 1)
 
-        panel:Help("NPC hitmarker appearance")
+        panel:Help("NPC hit marker appearance")
         panel:CheckBox("Use player hitmarker settings", "hm_npc_use_ply")
         panel:NumSlider("Screen center offset", "hm_npc_offset", 0, 500, 2)
         panel:NumSlider("Width", "hm_npc_width", 0, 50, 2)
@@ -118,7 +118,7 @@ hook.Add( "PopulateToolMenu", "CustomMenuSettings", function()
     end )
 
     spawnmenu.AddToolMenuOption( "Utilities", "BH Hit/Kill Markers", "KMark", "Kill marker", "", "", function( panel )
-        panel:CheckBox("Enable", "km_enabled")
+        panel:CheckBox("Enabled?", "km_enabled")
         panel:CheckBox("Test mode", "km_test")
         panel:CheckBox("NPC test", "km_test_npc")
 

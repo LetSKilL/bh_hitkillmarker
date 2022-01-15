@@ -202,30 +202,3 @@ net.Receive("bh_sb_dmgind", function ()
 end)
 
 include("config.lua")
-
-timer.Create("forwwawa", 3, 0, function()
-    for i = 0, 6 do
-        timer.Simple(i*0.05, function()
-            local _isnpc = false
-            if (_isnpc and !GetConVar("hm_npc"):GetBool()) or (!_isnpc and !GetConVar("hm_ply"):GetBool()) then return end
-            dmg_cur_leaf = dmg_cur_leaf + 1
-            if dmg_cur_leaf > #dmg_leafs then
-                dmg_cur_leaf = 1
-            end
-
-            dmg_leafs[dmg_cur_leaf] = 1
-            dmg_leafs_npc[dmg_cur_leaf] = _isnpc
-            dmg_last = CurTime()
-        end)
-    end
-
-    timer.Simple(0.33, function()
-        for k,v in ipairs(kill_lines) do
-            if v <= 0 then
-                kill_lines[k] = 1
-                kill_lines_npc[k] = _isnpc
-                return
-            end
-        end
-    end)
-end)
